@@ -11,17 +11,19 @@ import Moya
 
 class ViewController: UIViewController {
     
+    // Moya provider class instance
     let provider = MoyaProvider<TestAPI>()
     
-    @IBOutlet var testText: UILabel!
+    // button control class instance
     @IBOutlet var testButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        testText.isHidden = true
+        // initially hide the button
         testButton.isHidden = true
         
+        // call first API through the Moya provider
         provider.request(.color) { [weak self] result in
             guard let self = self else { return }
 
@@ -39,7 +41,9 @@ class ViewController: UIViewController {
         }
     }
 
+    // button on click handler
     @IBAction func testButtonClicked(_ sender: Any) {
+        // call second API through the Moya provider
         provider.request(.text) { [weak self] result in
             guard let self = self else { return }
 
@@ -57,12 +61,16 @@ class ViewController: UIViewController {
         }
     }
     
+    // update background color in case of error
+    // the call is routed through the main thread
     func updateBackgroundColor(color: UIColor) {
         DispatchQueue.main.async {
             self.view.backgroundColor = color;
         }
     }
     
+    // set background color to the color returned from first API
+    // the call is routed through the main thread
     func updateAPIColor(color: APIColor) {
         DispatchQueue.main.async {
             self.view.backgroundColor = UIColor(red: color.red, green: color.green, blue: color.blue, alpha: color.alpha);
@@ -70,11 +78,17 @@ class ViewController: UIViewController {
         }
     }
     
+    // show alert with the text returned from second API
+    // the call is routed through the main thread
     func updateAPIText(text: APIText) {
         DispatchQueue.main.async {
-            self.testText.isHidden = false
-            self.testText.text = text.text;
+            let alert = UIAlertController(title: "Response text", message: text.text, preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+            self.present(alert, animated: true)
         }
     }
+
 }
 

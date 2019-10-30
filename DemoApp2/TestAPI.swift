@@ -9,11 +9,7 @@
 import Foundation
 import Moya
 
-public enum TestAPI {
-    case color
-    case text
-}
-
+// first API response map
 struct APIColor: Decodable {
     let red: CGFloat
     let green: CGFloat
@@ -21,11 +17,20 @@ struct APIColor: Decodable {
     let alpha: CGFloat
 }
 
+// second API response map
 struct APIText: Decodable {
     let text: String
 }
 
+// test APIs
+public enum TestAPI {
+    case color
+    case text
+}
+
+// test APIs target
 extension TestAPI: TargetType {
+
     // Define base URL
     public var baseURL: URL {
         return URL(string: "http://51.79.20.91/0ss")!
@@ -66,4 +71,5 @@ extension TestAPI: TargetType {
     public var validationType: ValidationType {
         return .successCodes
     }
+
 }
